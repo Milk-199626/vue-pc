@@ -69,6 +69,9 @@ export default {
 .loginList {
   display: flex;
 }
+.loginList p:nth-child(2) {
+  margin-left: 10px;
+}
 .regisert {
   padding: 0 5px;
   margin-left: 5px;
