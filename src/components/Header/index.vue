@@ -67,7 +67,9 @@ export default {
       const localhost = {
         name: "search",
       };
+      // 如果有输入
       if (searchText) {
+        // 把输入值赋值给参数
         localhost.params = {
           searchText,
         };

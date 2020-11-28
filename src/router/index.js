@@ -37,6 +37,8 @@ export default new VueRouter({
     {
       path: "/login",
       component: Login,
+       // 当组件加载显示时，meta中的参数会传到$route中
+      // 当组件不加载显示时，meta中的参数不会传
       meta: {
         isHandelShow: true,
       },
@@ -50,6 +52,7 @@ export default new VueRouter({
     },
     {
       name: "search",
+      // ?: 代表 params 参数是可选的
       path: "/search/:searchText?",
       component: Search,
     },
