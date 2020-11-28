@@ -1,0 +1,37 @@
+/* 
+封装一个axios拦截器
+*/
+import axios from "axios";
+
+const instance = axios.create({
+  //当前的服务器地址
+  baseURL: "/api", //公共的基 础路径
+  headerL: {},
+});
+// 设置请求拦截器
+instance.interceptors.request.use(
+  // config请求配置对象
+  (config) => {
+    return config;
+  }
+);
+// 设置响应拦截器
+instance.interceptors.response.use(
+  //响应成功，但是不是功能成功可以用
+  (response) => {
+    //功能响应成功
+    if (response.data.code === 200) {
+      //响应成功的数据
+      return response.data.data;
+    }
+    //响应失败的原因
+    return Promise.reject(response.data.message);
+  },
+  (error) => {
+    const message = error.message || "网络错误";
+
+    return Promise.reject(message);
+  }
+);
+
+export default instance;
