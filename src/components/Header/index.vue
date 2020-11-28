@@ -32,11 +32,9 @@
         </a>
       </h1>
       <div class="searchArea">
-        <form action="###" class="searchForm">
-          <input type="text" class="header-bottom-input" />
-          <button @click="search" class="header-bottom-button" type="button">
-            搜索
-          </button>
+        <form action="###" class="searchForm" @submit.prevent="search">
+          <input type="text" class="header-bottom-input" v-model="searchText" />
+          <button class="header-bottom-button">搜索</button>
         </form>
       </div>
     </div>
@@ -46,9 +44,35 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      searchText: "",
+    };
+  },
   methods: {
+    //搜索功能函数
     search() {
-      this.$router.push("/search");
+      /*   //获取搜索数据
+      const { searchText } = this;
+      //判断是否要添加params参数
+      const params = searchText ? `/${searchText}` : "";
+      //生成跳转路径
+      const localhost = "/search" + params;
+      //编程时导航:原因将来要做搜索功能
+      this.$router.push(localhost); */
+
+      //获取搜索数据
+      const { searchText } = this;
+      //使用命名路由
+      const localhost = {
+        name: "search",
+      };
+      if (searchText) {
+        localhost.params = {
+          searchText,
+        };
+      }
+      this.$router.push(localhost);
     },
   },
 };

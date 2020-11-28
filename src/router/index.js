@@ -17,13 +17,20 @@ export default new VueRouter({
     {
       path: "/login",
       component: Login,
+      meta: {
+        isHandelShow: true,
+      },
     },
     {
       path: "/register",
       component: Register,
+      meta: {
+        isHandelShow: true,
+      },
     },
     {
-      path: "/search",
+      name: "search",
+      path: "/search/:searchText?",
       component: Search,
     },
   ],
