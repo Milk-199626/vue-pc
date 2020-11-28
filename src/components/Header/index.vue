@@ -27,9 +27,9 @@
     <!-- 头部第二行搜索区域 -->
     <div class="bottom">
       <h1 class="logoArea">
-        <a href="###" class="logo" title="尚品汇">
+        <router-link to="/" class="logo" title="尚品汇">
           <img src="./images/logo.png" alt="" />
-        </a>
+        </router-link>
       </h1>
       <div class="searchArea">
         <form action="###" class="searchForm" @submit.prevent="search">
