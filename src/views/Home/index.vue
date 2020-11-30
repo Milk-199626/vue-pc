@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 import Brand from "./Brand/Brand";
 import Floor from "./Floor/Floor";
 import Like from "./Like/Like";
@@ -28,6 +29,17 @@ import TodayRecommend from "./TodayRecommend/TodayRecommend";
 import TypeNav from "@comps/TypeNav";
 export default {
   name: "Home",
+  computed: {
+    ...mapState({
+      floor: (state) => state.home.floor,
+    }),
+  },
+  methods: {
+    ...mapActions(["getFloor"]),
+  },
+  mounted() {
+    this.getFloor();
+  },
   components: {
     Brand,
     Floor,
