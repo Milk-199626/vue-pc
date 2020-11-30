@@ -52,7 +52,7 @@ export default {
   methods: {
     //搜索功能函数
     search() {
-      /*   //获取搜索数据
+     /*    //获取搜索数据
       const { searchText } = this;
       //判断是否要添加params参数
       const params = searchText ? `/${searchText}` : "";
@@ -69,7 +69,7 @@ export default {
       };
       // 如果有输入
       if (searchText) {
-        // 把输入值赋值给参数
+        // 把输入值赋值给params参数
         localhost.params = {
           searchText,
         };

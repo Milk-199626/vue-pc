@@ -9,7 +9,7 @@ import { Message } from "element-ui";
 const instance = axios.create({
   //当前的服务器地址
   baseURL: "/api", //公共的基 础路径
-  headerL: {},
+  headers: {},
 });
 // 设置请求拦截器
 instance.interceptors.request.use(
