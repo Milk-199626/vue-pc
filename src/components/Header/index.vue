@@ -52,7 +52,7 @@ export default {
   methods: {
     //搜索功能函数
     search() {
-     /*    //获取搜索数据
+      /*    //获取搜索数据
       const { searchText } = this;
       //判断是否要添加params参数
       const params = searchText ? `/${searchText}` : "";
@@ -74,6 +74,21 @@ export default {
           searchText,
         };
       }
+      // 添加query参数
+      //因为是读取并没有修改，可以直接接收地址
+      const queryName = this.$route.query;
+      // 判断当前有没有query参数，有的话就加上
+      if (queryName) {
+        localhost.query = {
+          queryName,
+        };
+      }
+
+      /* const { categoryName } = this.$route.query;
+
+      if (categoryName) {
+        location.query = this.$route.query;
+      } */
       this.$router.push(localhost);
     },
   },

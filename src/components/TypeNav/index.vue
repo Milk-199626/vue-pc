@@ -1,7 +1,11 @@
 <template>
   <!-- 商品分类导航 -->
   <div class="type-nav">
-    <div class="container">
+    <div
+      class="container"
+      @mouseenter="isSearchShow = true"
+      @mouseleave="isSearchShow = false"
+    >
       <h2 class="all">全部商品分类</h2>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -13,24 +17,25 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-      <div class="sort">
-        <div class="all-sort-list2" @click="goSearch">
-          <div
-            class="item bo"
-            v-for="category in categoryList"
-            :key="category.categoryId"
-          >
-            <!-- 一级分类名称 -->
-            <h3>
-              <!-- 第三种方法（推荐）：使用事件代理把事件定义到父组件，父组件再通过冒泡传到子组件，这样就只绑定一个事件 -->
-              <a
-                :data-categoryName="category.categoryName"
-                :data-categoryId="category.categoryId"
-                :data-categorytype="1"
-                >{{ category.categoryName }}</a
-              >
-              <!-- 第二种方法：使用编程式导航，缺点绑定事件太多 -->
-              <!--  <a
+      <transition name="searchMove">
+        <div class="sort" v-show="isHomeShow || isSearchShow">
+          <div class="all-sort-list2" @click="goSearch">
+            <div
+              class="item bo"
+              v-for="category in categoryList"
+              :key="category.categoryId"
+            >
+              <!-- 一级分类名称 -->
+              <h3>
+                <!-- 第三种方法（推荐）：使用事件代理把事件定义到父组件，父组件再通过冒泡传到子组件，这样就只绑定一个事件 -->
+                <a
+                  :data-categoryName="category.categoryName"
+                  :data-categoryId="category.categoryId"
+                  :data-categorytype="1"
+                  >{{ category.categoryName }}</a
+                >
+                <!-- 第二种方法：使用编程式导航，缺点绑定事件太多 -->
+                <!--  <a
                 @click.prevent="
                   $router.push({
                     name: 'search',
@@ -43,28 +48,28 @@
                 >{{ category.categoryName }}</a
               > -->
 
-              <!-- 第一种方法：使用链接式导航，缺点是组件太多 -->
-              <!-- <router-link
+                <!-- 第一种方法：使用链接式导航，缺点是组件太多 -->
+                <!-- <router-link
                 :to="`/search?categoryName=${category.categoryName}&category1Id=${category.categoryId}`"
                 >{{ category.categoryName }}</router-link
               > -->
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem">
-                <dl
-                  class="fore"
-                  v-for="childCategory in category.categoryChild"
-                  :key="childCategory.categoryId"
-                >
-                  <!-- 二级分类名称 -->
-                  <dt>
-                    <a
-                      :data-categoryName="childCategory.categoryName"
-                      :data-categoryId="childCategory.categoryId"
-                      :data-categoryType="2"
-                      >{{ childCategory.categoryName }}</a
-                    >
-                    <!--  <a
+              </h3>
+              <div class="item-list clearfix">
+                <div class="subitem">
+                  <dl
+                    class="fore"
+                    v-for="childCategory in category.categoryChild"
+                    :key="childCategory.categoryId"
+                  >
+                    <!-- 二级分类名称 -->
+                    <dt>
+                      <a
+                        :data-categoryName="childCategory.categoryName"
+                        :data-categoryId="childCategory.categoryId"
+                        :data-categoryType="2"
+                        >{{ childCategory.categoryName }}</a
+                      >
+                      <!--  <a
                       @click.prevent="
                         $router.push({
                           name: 'search',
@@ -76,24 +81,24 @@
                       "
                       >{{ childCategory.categoryName }}</a
                     > -->
-                    <!-- <router-link
+                      <!-- <router-link
                       :to="`/search?categoryName=${childCategory.categoryName}&category2Id=${childCategory.categoryId}`"
                       >{{ childCategory.categoryName }}</router-link
                     > -->
-                  </dt>
-                  <dd>
-                    <!-- 三级分类名称 -->
-                    <em
-                      v-for="grandsonCategory in childCategory.categoryChild"
-                      :key="grandsonCategory.categoryId"
-                    >
-                      <a
-                        :data-categoryName="grandsonCategory.categoryName"
-                        :data-categoryId="grandsonCategory.categoryId"
-                        :data-categoryType="3"
-                        >{{ grandsonCategory.categoryName }}</a
+                    </dt>
+                    <dd>
+                      <!-- 三级分类名称 -->
+                      <em
+                        v-for="grandsonCategory in childCategory.categoryChild"
+                        :key="grandsonCategory.categoryId"
                       >
-                      <!--   <a
+                        <a
+                          :data-categoryName="grandsonCategory.categoryName"
+                          :data-categoryId="grandsonCategory.categoryId"
+                          :data-categoryType="3"
+                          >{{ grandsonCategory.categoryName }}</a
+                        >
+                        <!--   <a
                         @click.prevent="
                           $router.push({
                             name: 'search',
@@ -105,18 +110,19 @@
                         "
                         >{{ grandsonCategory.categoryName }}</a
                       > -->
-                      <!-- <router-link
+                        <!-- <router-link
                         :to="`/search?categoryName=${grandsonCategory.categoryName}&category3Id=${grandsonCategory.categoryId}`"
                         >{{ grandsonCategory.categoryName }}</router-link
                       > -->
-                    </em>
-                  </dd>
-                </dl>
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -126,6 +132,12 @@ import { mapActions, mapState } from "vuex";
 
 export default {
   name: "TypeNav",
+  data() {
+    return {
+      isHomeShow: this.$route.path === "/",
+      isSearchShow: false,
+    };
+  },
   // data() {
   //   return {
   //     /* 初始化响应数据 */
@@ -148,17 +160,24 @@ export default {
       // e.target.dataset  可以获取自定义属性
       const { categoryname, categoryid, categorytype } = e.target.dataset;
       //判断如果没有自定义属性就return出去
-      if (!categoryname) {
-        return;
-      }
-      this.$router.push({
+      if (!categoryname) return;
+      this.isSearchShow = false;
+      const localtion = {
         //命名路由
         name: "search",
         query: {
           categoryname: categoryname,
           [`category${categorytype}Id`]: categoryid,
         },
-      });
+      };
+      // 判断当前是否有params参数，有就加上
+      const { searchText } = this.$route.params;
+      if (searchText) {
+        localtion.params = {
+          searchText,
+        };
+      }
+      this.$router.push(localtion);
     },
   },
   mounted() {
@@ -207,6 +226,15 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
+
+      &.searchMove-enter-active {
+        transition: height 0.5s;
+        overflow: hidden;
+      }
+
+      &.searchMove-enter {
+        height: 0;
+      }
 
       .all-sort-list2 {
         .item {
