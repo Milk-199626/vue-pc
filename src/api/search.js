@@ -2,7 +2,7 @@ import request from "@utils/request";
 
 export const reqGetProductList = (data) => {
   return request({
-    method: "GET",
+    method: "POST",
     url: "/list",
     data,
   });
