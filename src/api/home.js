@@ -18,6 +18,6 @@ export const reqGetBanners = () => {
 export const reqGetFloor = () => {
   return mockRequest({
     method: "GET", //请求方式
-    url: "/floor", //请求地址
+    url: "/floors", //请求地址
   });
 };

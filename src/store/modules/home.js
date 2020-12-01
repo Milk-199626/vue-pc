@@ -4,7 +4,7 @@ export default {
   state: {
     categoryList: [], //首页三级分类数据
     banners: [],
-    floor: [],
+    floors: [],
   },
   getters: {},
   actions: {
@@ -17,8 +17,8 @@ export default {
       commit("GET_BANNERS", banners);
     },
     async getFloor({ commit }) {
-      const floor = await reqGetFloor();
-      commit("GET_FLOOR", floor);
+      const floors = await reqGetFloor();
+      commit("GET_FLOOR", floors);
     },
   },
   mutations: {
@@ -28,8 +28,8 @@ export default {
     GET_BANNERS(state, banners) {
       state.banners = banners;
     },
-    GET_FLOOR(state, floor) {
-      state.floor = floor;
+    GET_FLOOR(state, floors) {
+      state.floors = floors;
     },
   },
 };

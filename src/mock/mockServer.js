@@ -1,12 +1,12 @@
 import Mock from "mockjs";
 import banners from "./dbanners.json";
-import floor from "./dfloor.json";
+import floors from "./dfloor.json";
 
 Mock.mock("/mock/banners", "get", {
   code: 200,
-  "data|4": banners,
+  data: banners,
 });
-Mock.mock("/mock/floor", "get", {
+Mock.mock("/mock/floors", "get", {
   code: 200,
-  "data|7": floor,
+  "data|3-5": floors,
 });

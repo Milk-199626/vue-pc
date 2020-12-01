@@ -3,32 +3,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
-          <div class="swiper-wrapper">
-            <div
-              class="swiper-slide"
-              v-for="banner in banners"
-              :key="banner.id"
-            >
-              <img :src="banner.imgUrl" />
-            </div>
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div> -->
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div> -->
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
-            </div> -->
-          </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+        <Carousel :carouselList="banners" />
       </div>
       <div class="right">
         <div class="news">
@@ -105,6 +80,8 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+// 默认情况下，Swiper仅导出核心版本，而没有其他模块（如导航，分页等）。因此，您也需要导入和配置它们：
+import Carousel from "@comps/Carousel";
 export default {
   name: "ListContainer",
   computed: {
@@ -115,8 +92,11 @@ export default {
   methods: {
     ...mapActions(["getBanners"]),
   },
-  mounted() {
-    this.getBanners();
+  async mounted() {
+    await this.getBanners();
+  },
+  components: {
+    Carousel,
   },
 };
 </script>

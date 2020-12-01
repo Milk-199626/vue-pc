@@ -23,7 +23,7 @@
             >
               <!-- 一级分类名称 -->
               <h3>
-                <!-- 第三种方法（推荐）：使用事件代理把事件定义到父组件，父组件再通过冒泡传到子组件，这样就只绑定一个事件 -->
+                <!-- 第三种方法（推荐）：使用事件委托把事件定义到父组件，父组件再通过冒泡传到子组件，这样就只绑定一个事件 -->
                 <a
                   :data-categoryName="category.categoryName"
                   :data-categoryId="category.categoryId"
@@ -146,7 +146,11 @@ export default {
   //   this.categoryList = result.slice(0, 15);
   // },
   computed: {
+    //对象中的数据会传给组件
     ...mapState({
+      //categoryList就是要传递的数据
+      // 它的值是一个函数，函数内部会调用得到值
+      //调用时会把所有数据传递下去，就是stateno
       categoryList: (state) => state.home.categoryList,
     }),
   },
@@ -177,7 +181,9 @@ export default {
     },
   },
   mounted() {
+    // 在请求之前先判断vuex有没有数据，有的话就不发送请求
     if (this.categoryList.length) return;
+    //没有就发送请求
     this.getCategoryList();
   },
 };
