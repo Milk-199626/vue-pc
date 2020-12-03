@@ -64,33 +64,47 @@ export default {
       //获取搜索数据
       const { searchText } = this;
       //使用命名路由
-      const localhost = {
+      const localtion = {
         name: "search",
       };
       // 如果有输入
       if (searchText) {
         // 把输入值赋值给params参数
-        localhost.params = {
+        localtion.params = {
           searchText,
         };
       }
       // 添加query参数
       //因为是读取并没有修改，可以直接接收地址
-      const queryName = this.$route.query;
-      // 判断当前有没有query参数，有的话就加上
-      if (queryName) {
-        localhost.query = {
-          queryName,
-        };
-      }
+      // const queryName = this.$route.query;
+      // // 判断当前有没有query参数，有的话就加上
+      // if (queryName) {
+      //   localhost.query = {
+      //     queryName,
+      //   };
+      // }
+      const { categoryName } = this.$route.query;
 
+      if (categoryName) {
+        localtion.query = this.$route.query;
+      }
+      //判断是不是命名路由是不是search组件
+      if (this.$route.name === "search") {
+        this.$router.replace(localtion);
+      } else {
+        this.$router.push(localtion);
+      }
       /* const { categoryName } = this.$route.query;
 
       if (categoryName) {
         location.query = this.$route.query;
       } */
-      this.$router.push(localhost);
     },
+  },
+  mounted() {
+    this.$bus.$on("clearKeyword", () => {
+      this.searchText = "";
+    });
   },
 };
 </script>

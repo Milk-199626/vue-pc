@@ -166,7 +166,7 @@ export default {
         //命名路由
         name: "search",
         query: {
-          categoryname: categoryname,
+          categoryName: categoryname,
           [`category${categorytype}Id`]: categoryid,
         },
       };
@@ -177,7 +177,12 @@ export default {
           searchText,
         };
       }
-      this.$router.push(localtion);
+      //判断是不是命名路由是不是search组件
+      if (this.$route.name === "search") {
+        this.$router.replace(localtion);
+      } else {
+        this.$router.push(localtion);
+      }
     },
   },
   mounted() {
