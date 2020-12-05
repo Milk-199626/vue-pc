@@ -83,6 +83,7 @@ export default {
       //     queryName,
       //   };
       // }
+      // 添加query参数
       const { categoryName } = this.$route.query;
 
       if (categoryName) {

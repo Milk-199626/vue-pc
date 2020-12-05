@@ -58,7 +58,6 @@ export default {
   name: "SearchSelector",
   props: {
     addTrademark: Function,
-    addProp: Function,
   },
   computed: {
     ...mapGetters(["trademarkList", "attrsList"]),

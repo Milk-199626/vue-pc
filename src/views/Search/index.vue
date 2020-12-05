@@ -47,7 +47,7 @@
                 <!--   order: "1:desc", // 排序方式：1：综合排序  2：价格排序   asc 升序  desc 降序 -->
                 <!-- indexOf检测是不是1并且比-1大如果是返回true -->
                 <li
-                  :class="{ active: options.order.indexOf('1') > -1 }"
+                  :class="{ active: isOrder('1') > -1 }"
                   @click="setOrder('1')"
                 >
                   <a
@@ -70,7 +70,7 @@
                   <a href="#">评价</a>
                 </li>
                 <li
-                  :class="{ active: options.order.indexOf('2') > -1 }"
+                  :class="{ active: isOrder('2') > -1 }"
                   @click="setOrder('2')"
                 >
                   <a
@@ -80,16 +80,14 @@
                         :class="{
                           iconfont: true,
                           'icon-icon-test': true,
-                          deactive:
-                            options.order.indexOf('2') > -1 && isPriceDown,
+                          deactive: isOrder('2') > -1 && isPriceDown,
                         }"
                       ></i
                       ><i
                         :class="{
                           iconfont: true,
                           'icon-icon-test1': true,
-                          deactive:
-                            options.order.indexOf('2') > -1 && !isPriceDown,
+                          deactive: isOrder('2') > -1 && !isPriceDown,
                         }"
                       ></i></span
                   ></a>
@@ -103,9 +101,9 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
+                    <router-link :to="`/detail/${goods.id}`"
                       ><img :src="goods.defaultImg"
-                    /></a>
+                    /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -114,11 +112,8 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ goods.title }}</a
+                    <router-link :to="`/detail/${goods.id}`"
+                      >{{ goods.title }}</router-link
                     >
                   </div>
                   <div class="commit">
@@ -140,8 +135,15 @@
             </ul>
           </div>
           <!-- 分页器 -->
+          <Pagination
+            @current-change="handleCurrentChange"
+            :current-page="options.pageNo"
+            :pager-count="7"
+            :page-size="5"
+            :total="total"
+          />
           <!--total：总数，sizes：每页多少条，prev：上一页, next:下一页，jumper：前往第几页 -->
-          <el-pagination
+          <!-- <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="options.pageNo"
@@ -151,7 +153,7 @@
             layout=" jumper,sizes, prev, pager, next, total"
             :total="total"
           >
-          </el-pagination>
+          </el-pagination> -->
         </div>
       </div>
     </div>
@@ -161,6 +163,7 @@
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
 import TypeNav from "@comps/TypeNav";
+import Pagination from "@comps/Pagination";
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Search",
@@ -193,8 +196,10 @@ export default {
   },
   methods: {
     ...mapActions(["getProductList"]),
-    //路径跳转参数赋值
+    //更新列表商品
     uptateProductList(pageNo = 1) {
+      // 解构赋值提取 params 中 searchText 属性
+      // 将 searchText 重命名为 keyword
       const { searchText: keyword } = this.$route.params;
       const {
         category1Id,
@@ -202,10 +207,9 @@ export default {
         category3Id,
         categoryName,
       } = this.$route.query;
-
       const options = {
-        ...this.options,
-        keyword,
+        ...this.options, //携带上所有的初始化数据
+        keyword, //以下的数据会覆盖掉上面的数据
         category1Id,
         category2Id,
         category3Id,
@@ -219,6 +223,7 @@ export default {
     //清除关键字
     delKeyword() {
       this.options.keyword = "";
+      //$emit触发事件
       this.$bus.$emit("clearKeyword");
       this.$router.replace({
         name: "search",
@@ -236,21 +241,24 @@ export default {
         params: this.$route.params,
       });
     },
+    //添加品牌并更新数据
     addTrademark(trademark) {
+      if (this.options.trademark) return;
       this.options.trademark = trademark;
       this.uptateProductList();
     },
+    //删除品牌并更新数据
     delTrademark() {
       this.options.trademark = "";
       this.uptateProductList();
     },
-    //怎么拿数据呢？
+    // 添加品牌属性并更新数据
     addProp(prop) {
-      console.log(prop);
+      if (this.options.props.indexOf(prop) > -1) return;
       this.options.props.push(prop);
-      // console.log(this.options.props);
       this.uptateProductList();
     },
+    // 删除品牌属性
     delProp(index) {
       this.options.props.splice(index, 1);
       this.uptateProductList();
@@ -259,7 +267,6 @@ export default {
     setOrder(order) {
       // 当你有数组有两个值的时候，有一个你不想写的时候，可以使用逗号隔开
       let [oderNum, orderTwo] = this.options.order.split(":");
-      // console.log(oderNum);
       // 不相等点击的就是第一次：不改变图标
       // 相等点击的就是第二次：改变图标
       if (oderNum === order) {
@@ -277,19 +284,16 @@ export default {
         //判断是不是综合排序，然后根据箭头状态判断是不是升降序
         if (order === "1") {
           orderTwo = this.isAllDown ? "desc" : "asc";
-          // console.log(orderTwo);
         } else {
           //让他默认初始化状态是升序状态
           //样式
           this.isPriceDown = false;
           //数据
           orderTwo = "asc";
-          // console.log(orderTwo);
         }
       }
       // `${order}:${orderTwo}`打印出 {1/2}:desc
       this.options.order = `${order}:${orderTwo}`;
-      // console.log(`${order}:${orderTwo}`);
       this.uptateProductList();
     },
     // 当每页条数发生变化触发
@@ -299,9 +303,10 @@ export default {
     },
     // // 当页码发生变化触发
     handleCurrentChange(pageNo) {
-      // console.log("pageNo", pageNo);
-      // this.options.pageNo = pageNo;
       this.uptateProductList(pageNo);
+    },
+    isOrder(order) {
+      return this.options.order.indexOf(order) > 1;
     },
   },
   mounted() {
@@ -311,6 +316,7 @@ export default {
   components: {
     SearchSelector,
     TypeNav,
+    Pagination,
   },
 };
 </script>
