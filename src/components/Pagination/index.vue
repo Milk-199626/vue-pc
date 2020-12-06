@@ -22,7 +22,7 @@
     <button
       :class="{ active: myCurrentPage === totalPage }"
       @click="setCurrentPage(totalPage)"
-      v-show="myCurrentPage > 1"
+      v-show="totalPage > 1"
     >
       {{ totalPage }}
     </button>
@@ -123,23 +123,24 @@ export default {
       // 1 [2] 3
       // [1] --> 如果start大于总页数，不显示
       // 1 ... 5 6 7 8 [9] 10
-      //如果点击的当前的页数大于或等于总页数 - 中间总数一半的页数 2 >=10-2 
+      //如果点击的当前的页数大于或等于总页数 - 中间总数一半的页数 2 >=10-2  3-0=3
       if (myCurrentPage >= totalPage - middleHalf) {
         // 1 ... 5 6 7 8 [9] 10
         start = totalPage - middleSum;
       } else {
         // 1 [2] 3 4 5 6 ...10
         // 1...3 4 [5] 6 7...10
-        //0 = 2 - 2
+        //0 = 2 - 2 1=1-0  5 -2 =3
         start = myCurrentPage - middleHalf;
       }
       if (start <= 2) {
         // 1 [2] 3 4 5 6 ...10
         start = 2;
       }
-      //正常情况 
-      // 6 =  2 + 5 - 1 
+      //正常情况
+      // 6 =  2 + 5 - 1 2+1=3-1=2
       end = start + middleSum - 1;
+
       if (end >= totalPage) {
         end = totalPage - 1;
       }
@@ -151,8 +152,10 @@ export default {
     //遍历的数据
     mapBtnPage() {
       const { start, end } = this.startEnd;
+      //1 [2] 3 4 3-2 =1 也就是遍历的时候如果不加一，就会少遍历一次，所以需要加1
       const middleSum = end - start + 1;
-      return middleSum > 1 ? middleSum : 0;
+      //如果大于1页或者等于1
+      return middleSum >= 1 ? middleSum : 0;
     },
   },
   methods: {

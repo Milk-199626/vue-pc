@@ -2,10 +2,13 @@
 封装一个axios拦截器
 */
 import axios from "axios";
+import { Message } from "element-ui";
+import getUserTempId from "@utils/getUserTempId";
+
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import { Message } from "element-ui";
 
+const userTempId = getUserTempId();
 const instance = axios.create({
   //当前的服务器地址
   baseURL: "/api", //公共的基 础路径
@@ -16,6 +19,7 @@ instance.interceptors.request.use(
   // config请求配置对象
   (config) => {
     NProgress.start();
+    config.headers.userTempId = userTempId;
     return config;
   }
 );
