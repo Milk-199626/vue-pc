@@ -4,6 +4,8 @@
 import axios from "axios";
 import { Message } from "element-ui";
 import getUserTempId from "@utils/getUserTempId";
+// store就是vuex的store，也是this.$store
+import store from "@store";
 
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
@@ -19,6 +21,12 @@ instance.interceptors.request.use(
   // config请求配置对象
   (config) => {
     NProgress.start();
+
+    const token = store.state.user.token;
+    //修改config，用来添加公共的请求参数
+    if (token) {
+      config.headers.token = token;
+    }
     config.headers.userTempId = userTempId;
     return config;
   }

@@ -79,7 +79,7 @@
           <i class="summoney">{{ tatolPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <router-link class="sum-btn" to="/trade">结算</router-link>
         </div>
       </div>
     </div>
@@ -96,7 +96,6 @@ export default {
     }),
     //商品总数
     tatol() {
-      console.log(111);
       return this.cartList
         .filter((cart) => cart.isChecked === 1)
         .reduce((p, c) => {

@@ -1,11 +1,12 @@
 <template>
   <div class="spec-preview">
     <img :src="imgUrl" />
-    <div class="event"></div>
+    <div class="event" @mousemove="move" ref="event"></div>
+    <div class="mask" ref="mask"></div>
+
     <div class="big">
-      <img :src="bigImgUrl" />
+      <img :src="bigImgUrl" ref="bigImg" />
     </div>
-    <div class="mask"></div>
   </div>
 </template>
 
@@ -16,7 +17,43 @@ export default {
     imgUrl: String,
     bigImgUrl: String,
   },
-  methods: {},
+  mounted() {
+    // console.log("maskWidth", this.$refs);//这里能找到元素的宽
+    this.maskWidth = this.$refs.event.clientWidth / 2;
+  },
+  methods: {
+    move(event) {
+      let left, top;
+      const maskDiv = this.$refs.mask;
+      // console.log(maskDiv);
+      const bigImg = this.$refs.bigImg;
+      // console.log(bigImg);
+      // 取出相关的数据，事件的offsetx/offsety
+      const { offsetX, offsetY } = event;
+      // console.log(event);
+      const maskWidth = this.maskWidth;
+      // 计算left, top
+      left = offsetX - maskWidth / 2;
+      top = offsetY - maskWidth / 2;
+      // left和top必须在[0, maskWidth]区间内
+      if (left < 0) {
+        left = 0;
+      } else if (left > maskWidth) {
+        left = maskWidth;
+      }
+      if (top < 0) {
+        top = 0;
+      } else if (top > maskWidth) {
+        top = maskWidth;
+      }
+      // 指定mask <div>的坐标值(left, top)
+      maskDiv.style.left = left + "px";
+      maskDiv.style.top = top + "px";
+      //指定大图
+      bigImg.style.left = -2 * left + "px";
+      bigImg.style.left = -2 * top + "px";
+    },
+  },
 };
 </script>
 

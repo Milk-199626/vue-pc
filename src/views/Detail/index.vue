@@ -360,6 +360,9 @@ export default {
     return {
       currentImgIndex: 0,
       skuNum: 1,
+      isShow: false,
+      left: 0,
+      top: 0,
     };
   },
 
@@ -376,6 +379,7 @@ export default {
     updateCurrentImgIndex(index) {
       this.currentImgIndex = index;
     },
+    // 添加到购物车
     async addCart() {
       try {
         await this.updateCartCount({

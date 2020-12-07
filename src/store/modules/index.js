@@ -3,10 +3,12 @@ import home from "@store/modules/home";
 import search from "@store/modules/search";
 import detail from "@store/modules/detail";
 import shopcart from "@store/modules/shopcart";
+import user from "@store/modules/user";
 //统一暴露出去
 export default {
   home,
   search,
   detail,
   shopcart,
+  user,
 };
